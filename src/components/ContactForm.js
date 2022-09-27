@@ -57,6 +57,7 @@ const ContactForm = ({ handleAddContact }) => {
               variant="filled"
               onChange={handleChangeName}
               value={name}
+              type="text"
               fullWidth
             />
             <TextField
@@ -66,6 +67,7 @@ const ContactForm = ({ handleAddContact }) => {
               sx={{ marginTop: "1em" }}
               onChange={handleChangePhone}
               value={phone}
+              type="text"
               fullWidth
             />
             <TextField
@@ -75,6 +77,7 @@ const ContactForm = ({ handleAddContact }) => {
               sx={{ marginTop: "1em" }}
               onChange={handleChangeEmail}
               value={email}
+              type="text"
               fullWidth
             />
             <TextField
@@ -84,6 +87,7 @@ const ContactForm = ({ handleAddContact }) => {
               sx={{ marginTop: "1em" }}
               onChange={handleChangePhotoURL}
               value={photoURL}
+              type="text"
               fullWidth
             />
             <Button type="submit" variant="text" sx={{ marginTop: "1em" }}>
