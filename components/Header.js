@@ -1,7 +1,7 @@
-// Kalian bisa menambahkan CSS di src/components/Header.css
-// atau langsung tambahkan dengan sx={{}}
 import React from "react";
 import { Typography, Divider, Box } from "@mui/material";
+// Kalian bisa menambahkan CSS di src/components/Header.css
+// atau langsung tambahkan dengan sx={{}}
 
 // Header berisi judul dan subtitle
 // Judul: Call a Friend
