@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, Divider, Box, Container, Grid } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import "./App.css";
 
 // Uncomment untuk memuat daftar kontak
@@ -19,7 +19,8 @@ const App = () => {
   const [contacts, setContacts] = useState(contactsJSON);
 
   const handleAddContact = (contactBaru) => {
-    setContacts([...contacts, contactBaru]);
+    const newContacts = [...contacts, contactBaru];
+    setContacts(newContacts);
   };
 
   return (
@@ -28,7 +29,10 @@ const App = () => {
       <Container sx={{ marginTop: "2.5em" }} fixed>
         <Grid container spacing={8}>
           <Grid item xs={6}>
-            <ContactForm handleAddContact={handleAddContact} />
+            <ContactForm
+              contacts={contacts}
+              handleAddContact={handleAddContact}
+            />
           </Grid>
 
           <Grid item xs={6}>

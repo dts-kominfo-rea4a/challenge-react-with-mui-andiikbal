@@ -5,44 +5,86 @@ import { Card, CardContent, TextField, Button } from "@mui/material";
 // dan Card
 // https://mui.com/material-ui/react-card/#basic-card
 
-const ContactForm = ({ handleAddContact }) => {
+const ContactForm = ({ contacts, handleAddContact }) => {
   // Form berisi name, phone, email, dan photo url
   // Buatlah state newContact berupa objek sesuai dengan data yang ada
-  const [name, setName] = useState("");
-  const handleChangeName = (event) => {
-    setName(event.target.value);
+  const [newContact, setNewContact] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    photo: "",
+  });
+
+  const handleInputChange = (event) => {
+    setNewContact({ ...newContact, [event.target.name]: event.target.value });
   };
 
-  const [phone, setPhone] = useState("");
-  const handleChangePhone = (event) => {
-    setPhone(event.target.value);
-  };
+  // state untuk menampung pesan error
+  const [errors, setErrors] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    photo: "",
+  });
 
-  const [email, setEmail] = useState("");
-  const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const [photoURL, setPhotoURL] = useState("");
-  const handleChangePhotoURL = (event) => {
-    setPhotoURL(event.target.value);
+  // function untuk memeriksa apakah ada No. telepon yang sama atau tidak
+  const cekDuplikasiPhone = () => {
+    return contacts.find((contact) => contact.phone === newContact.phone);
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    if (name !== "" && phone !== "" && email !== "" && photoURL !== "") {
-      const contactBaru = {
-        name: name,
-        phone: phone,
-        email: email,
-        photo: photoURL,
-      };
+    let pesanErrors = {};
 
-      handleAddContact(contactBaru);
-      setPhotoURL("");
-      setEmail("");
-      setPhone("");
-      setName("");
+    // validasi name
+    if (newContact.name.trim() === "") {
+      pesanErrors.name = "Name tidak boleh kosong";
+    } else {
+      pesanErrors.name = "";
+    }
+
+    // validasi phone
+    if (newContact.phone.trim() === "") {
+      pesanErrors.phone = "Phone tidak boleh kosong";
+    } else if (!/^[0-9]{12}$/.test(newContact.phone)) {
+      pesanErrors.phone = "Phone harus 12 karakter angka";
+    } else if (cekDuplikasiPhone()) {
+      pesanErrors.phone = "Phone sudah dipakai";
+    } else {
+      pesanErrors.phone = "";
+    }
+
+    // validasi email
+    if (newContact.email.trim() === "") {
+      pesanErrors.email = "Email tidak boleh kosong";
+    } else {
+      pesanErrors.email = "";
+    }
+
+    // validasi photo
+    if (newContact.photo.trim() === "") {
+      pesanErrors.photo = "URL Photo tidak boleh kosong";
+    } else {
+      pesanErrors.photo = "";
+    }
+
+    setErrors(pesanErrors);
+
+    let formValid = true;
+    for (let inputName in pesanErrors) {
+      if (pesanErrors[inputName].length > 0) {
+        formValid = false;
+      }
+    }
+
+    if (formValid) {
+      handleAddContact(newContact);
+      setNewContact({
+        name: "",
+        phone: "",
+        email: "",
+        photo: "",
+      });
     }
   };
 
@@ -52,44 +94,57 @@ const ContactForm = ({ handleAddContact }) => {
         <CardContent>
           <form style={{ textAlign: "left" }} onSubmit={handleFormSubmit}>
             <TextField
-              required
-              label="Name"
+              name="name"
+              label="Name *"
               variant="filled"
-              onChange={handleChangeName}
-              value={name}
+              onChange={handleInputChange}
+              value={newContact.name}
               type="text"
               fullWidth
             />
+            {errors.name && (
+              <small style={{ color: "red" }}>{errors.name}</small>
+            )}
             <TextField
-              required
-              label="Phone"
+              name="phone"
+              label="Phone *"
               variant="filled"
               sx={{ marginTop: "1em" }}
-              onChange={handleChangePhone}
-              value={phone}
+              onChange={handleInputChange}
+              value={newContact.phone}
               type="text"
               fullWidth
             />
+            {errors.phone && (
+              <small style={{ color: "red" }}>{errors.phone}</small>
+            )}
             <TextField
-              required
-              label="Email"
+              name="email"
+              label="Email *"
               variant="filled"
               sx={{ marginTop: "1em" }}
-              onChange={handleChangeEmail}
-              value={email}
+              onChange={handleInputChange}
+              value={newContact.email}
               type="text"
               fullWidth
             />
+            {errors.email && (
+              <small style={{ color: "red" }}>{errors.email}</small>
+            )}
             <TextField
-              required
-              label="Photo URL"
+              name="photo"
+              label="Photo URL *"
               variant="filled"
               sx={{ marginTop: "1em" }}
-              onChange={handleChangePhotoURL}
-              value={photoURL}
+              onChange={handleInputChange}
+              value={newContact.photo}
               type="text"
               fullWidth
             />
+            {errors.photo && (
+              <small style={{ color: "red" }}>{errors.photo}</small>
+            )}
+            <br />
             <Button type="submit" variant="text" sx={{ marginTop: "1em" }}>
               Add New
             </Button>
